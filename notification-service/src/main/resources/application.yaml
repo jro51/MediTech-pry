@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: notification-service
+  config:
+    import: "optional:configserver:http://localhost:8888"
+
+  # Esto le dice a Spring que no falle si la BD no está disponible al arrancar
+  jpa:
+    # Sustituye a la propiedad 'temp' antigua
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        # Configuración moderna para evitar errores de metadatos en el arranque
+        boot:
+          allow_jdbc_metadata_access: false
+  datasource:
+    url: jdbc:mysql://localhost:3310/notification_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver

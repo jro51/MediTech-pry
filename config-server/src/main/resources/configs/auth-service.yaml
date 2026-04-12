@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: auth-service
+  # ESTO ES LO IMPORTANTE: Mover datasource y jpa aquí dentro
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${AUTH_DB_PORT:3307}/auth_db?allowPublicKeyRetrieval=true&useSSL=false
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:root}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    # Recuerda que para Hibernate 7 usamos el genérico si el otro falló
+    database-platform: org.hibernate.dialect.MySQLDialect
+
+server:
+  port: 8081
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+# JWT va en la raíz, al mismo nivel que spring:
+jwt:
+  secret: ${JWT_SECRET:meditech-super-secret-key-must-be-at-least-256-bits-long}
+  expiration: 86400000

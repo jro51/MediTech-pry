@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: eureka-server
+  config:
+    # Primero busca su propia config en el Config Server
+    import: "optional:configserver:http://localhost:8888"
+
+server:
+  port: 8761
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    # Eureka no se registra a sí mismo — él ES el registro
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+  server:
+    # Tiempo de espera antes de eliminar servicios caídos (en ms)
+    # En desarrollo lo bajamos para detectar caídas más rápido
+    eviction-interval-timer-in-ms: 5000
+    # Desactiva el modo de autopreservación en desarrollo
+    # (en producción déjalo en true)
+    enable-self-preservation: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
