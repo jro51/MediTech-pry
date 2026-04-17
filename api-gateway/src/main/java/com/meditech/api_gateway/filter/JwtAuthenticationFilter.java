@@ -32,8 +32,9 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String path = exchange.getRequest().getURI().getPath();
+        String method = exchange.getRequest().getMethod().name();
 
-        if(isPublicRoute(path)){
+        if(isPublicRoute(path, method)){
             return chain.filter(exchange);
         }
 
@@ -55,7 +56,7 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
                     .request(r -> r
                             .header("X-User-Email", claims.getSubject())
                             .header("X-User-Role", claims.get("role", String.class))
-                            .header("X-User-Id", claims.get("userId", String.class)))
+                            .header("X-User-Id", String.valueOf(claims.get("userId"))))
                     .build();
 
             return chain.filter(modifiedExchange);
@@ -67,8 +68,13 @@ public class JwtAuthenticationFilter implements GlobalFilter, Ordered {
 
     }
 
-    private boolean isPublicRoute(String path){
-        return PUBLIC_ROUTES.stream().anyMatch(path::startsWith);
+    private boolean isPublicRoute(String path, String method) {
+        // 1. Los GET a productos son públicos para que cualquiera los vea
+        if (path.startsWith("/api/products") && "GET".equals(method)) {
+            return true;
+        }
+        // 2. El login y register siempre son públicos (normalmente son POST)
+        return path.startsWith("/api/auth/login") || path.startsWith("/api/auth/register");
     }
 
     private Claims validateToken(String token){
