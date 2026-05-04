@@ -2,11 +2,14 @@ spring:
   application:
     name: product-service
   config:
-    import: "optional:configserver:http://localhost:8888"
+    import: "optional:configserver:http://config-server:8888"
+    retry:
+      enabled: true
+      initial-interval: 3000
+      max-attempts: 10
 
   # Esto le dice a Spring que no falle si la BD no está disponible al arrancar
   jpa:
-    # Sustituye a la propiedad 'temp' antigua
     database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
       ddl-auto: update
@@ -17,7 +20,7 @@ spring:
         boot:
           allow_jdbc_metadata_access: false
   datasource:
-    url: jdbc:mysql://localhost:3308/product_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://product-db:3306/product_db?createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false
     username: root
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -25,7 +28,7 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
 
 server:
   port: 8082

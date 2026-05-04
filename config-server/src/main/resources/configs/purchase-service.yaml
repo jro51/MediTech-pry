@@ -4,7 +4,7 @@ spring:
 
   # La base de datos va aquí, dentro de spring
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${PURCHASE_DB_PORT:3309}/purchase_db?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://purchase-db:3306/purchase_db?allowPublicKeyRetrieval=true&useSSL=false
     username: ${DB_USER:root}
     password: ${DB_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -18,7 +18,7 @@ spring:
 
   # Kafka va aquí, dentro de spring
   kafka:
-    bootstrap-servers: ${KAFKA_HOST:localhost}:9092
+    bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -34,4 +34,4 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/

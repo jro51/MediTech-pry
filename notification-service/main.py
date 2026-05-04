@@ -5,19 +5,36 @@ from models import Notification
 from consumer import start_consumer_thread
 from contextlib import asynccontextmanager
 import logging
+import time
+from sqlalchemy.exc import OperationalError
 
+# Configuración de logs
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Crea las tablas al iniciar
-Base.metadata.create_all(bind=engine)
+def init_db():
+    """Intenta conectar a la BD con reintentos."""
+    retries = 5
+    while retries > 0:
+        try:
+            # Intentamos crear las tablas
+            Base.metadata.create_all(bind=engine)
+            logger.info("Tablas creadas exitosamente.")
+            return
+        except OperationalError:
+            logger.warning(f"BD no lista, reintentando en 5s... ({retries} intentos restantes)")
+            time.sleep(5)
+            retries -= 1
+    raise Exception("No se pudo conectar a la base de datos tras varios intentos.")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Al arrancar: inicia el consumer de Kafka
+    # 1. Aseguramos que la BD esté lista
+    init_db()
+
+    # 2. Arrancamos Kafka
     logger.info("Arrancando notification-service...")
     start_consumer_thread()
-    logger.info("Consumer de Kafka iniciado")
     yield
     logger.info("Apagando notification-service...")
 

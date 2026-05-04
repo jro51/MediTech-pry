@@ -26,7 +26,7 @@ spring:
             - StripPrefix=1
 
         - id: notification-service
-          uri: http://localhost:8084
+          uri: lb://notification-service
           predicates:
             - Path=/api/notifications/**
           filters:
@@ -51,7 +51,7 @@ eureka:
     prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://eureka-server:8761/eureka/
 
 jwt:
   secret: ${JWT_SECRET:meditech-super-secret-key-must-be-at-least-256-bits-long}
@@ -60,7 +60,7 @@ jwt:
 management:
   endpoint:
     gateway:
-      enabled: true # ESTA LÍNEA ES CLAVE para que aparezca la ruta
+      enabled: true
   endpoints:
     web:
       exposure:

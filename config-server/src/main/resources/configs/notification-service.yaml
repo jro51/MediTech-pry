@@ -6,7 +6,7 @@ server:
   port: 8084
 
   datasource:
-    url: jdbc:mysql://${DB_HOST:localhost}:${NOTIFICATION_DB_PORT:3310}/notification_db?allowPublicKeyRetrieval=true&useSSL=false
+    url: jdbc:mysql://notification-db:3306/notification_db?allowPublicKeyRetrieval=true&useSSL=false
     username: ${DB_USER:root}
     password: ${DB_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -18,7 +18,7 @@ server:
     database-platform: org.hibernate.dialect.MySQL8Dialect
 
   kafka:
-    bootstrap-servers: ${KAFKA_HOST:localhost}:9092
+    bootstrap-servers: kafka:9092
     consumer:
       group-id: notification-group
       auto-offset-reset: earliest
