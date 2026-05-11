@@ -170,7 +170,7 @@ Antes de ejecutar el proyecto asegúrate de tener instalado:
 
 ```bash
 git clone https://github.com/<tu-usuario>/MediTech-pry.git
-cd MediTech
+cd MediTech-pry
 ```
 
 ### 2. Configurar la API Key de Anthropic
