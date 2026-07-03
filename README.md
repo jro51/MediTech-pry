@@ -45,7 +45,7 @@ auth  product                             │
                                   notification-service
                                      Python (8084)
                                           │
-                                   Claude Anthropic API
+                                   Claude Anthropic API (Por ahora gratis)
                                           │
                                    notification_db
                                        (3310)
