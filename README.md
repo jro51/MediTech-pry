@@ -20,6 +20,8 @@
 
 El proyecto fue diseñado siguiendo principios de arquitectura limpia: cada microservicio es autónomo, tiene su propia base de datos, se comunica a través de interfaces bien definidas y puede desplegarse de forma independiente.
 
+> Este repositorio contiene el **backend**. El cliente en React vive en un repositorio separado: **[MediTech-Frontend](https://github.com/jro51/MediTech-Frontend)**.
+
 ---
 
 ## Arquitectura del Sistema
@@ -169,8 +171,8 @@ Antes de ejecutar el proyecto asegúrate de tener instalado:
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/<tu-usuario>/MediTech.git
-cd MediTech
+git clone https://github.com/<tu-usuario>/MediTech-pry.git
+cd MediTech-pry
 ```
 
 ### 2. Configurar la API Key de Anthropic
@@ -319,12 +321,8 @@ cd product-service && mvn clean package -DskipTests && cd ..
 cd purchase-service && mvn clean package -DskipTests && cd ..
 cd api-gateway && mvn clean package -DskipTests && cd ..
 
-# 2. Levantar todo con Docker Compose
+# 2. Levantar todo con Docker Compose (incluye el notification-service Python)
 docker-compose up -d
-
-# 3. Arrancar el notification-service Python (aún no está en docker-compose)
-cd notification-service
-python -m uvicorn main:app --host 0.0.0.0 --port 8084 --reload
 ```
 
 Para detener todos los contenedores:
@@ -599,9 +597,9 @@ Abre el Pull Request en GitHub contra `main` con un título descriptivo.
 - [ ] **Circuit Breaker con Resilience4j** — respuesta de fallback cuando `product-service` no responde
 - [ ] **Bean Validation** — validaciones con `@NotNull`, `@NotBlank` en los DTOs
 - [ ] **Tests unitarios** — `@SpringBootTest` y `@WebMvcTest` para cada servicio
-- [ ] **Frontend actualizado** — migrar React para consumir la API a través del gateway
-- [ ] **Docker Compose completo** — incluir el notification-service Python en docker-compose
 - [ ] **Zipkin** — trazabilidad distribuida entre servicios
+
+> El frontend en React ya consume la API a través del API Gateway y el `notification-service` Python ya está integrado en `docker-compose.yaml`. El repositorio del frontend está en [MediTech-Frontend](https://github.com/jro51/MediTech-Frontend).
 
 ---
 
